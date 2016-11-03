@@ -46,7 +46,7 @@ retrieve_current_config(sr_session_ctx_t *session)
 static int
 module_change_cb(sr_session_ctx_t *session, const char *module_name, sr_notif_event_t event, void *private_ctx)
 {
-    syslog(LOG_DEBUG, "configuration has changed. Event=%s", event==SR_EV_NOTIFY?"notify":event==SR_EV_VERIFY?"verify":"unknown");
+    syslog(LOG_DEBUG, "configuration has changed. Event=%s", event==SR_EV_APPLY?"apply":event==SR_EV_VERIFY?"verify":"unknown");
 
     retrieve_current_config(session);
 
