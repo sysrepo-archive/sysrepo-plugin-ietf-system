@@ -24,7 +24,7 @@ add_library(sysrepo-plugin-ietf-system SHARED
 )
 target_link_libraries(sysrepo-plugin-ietf-system ${SYSREPO_LIBRARIES})
 
-set(PLUGINS_DIR "${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/sysrepo/plugins/" CACHE PATH "Sysrepo plugins directory.")
+set(PLUGINS_DIR "${CMAKE_INSTALL_LIBDIR}/sysrepo/plugins/" CACHE PATH "Sysrepo plugins directory.")
 set(YANG_DIR ${CMAKE_INSTALL_PREFIX}/share/sysrepo/yang)
 
     install(FILES ${YANG_SRCS} DESTINATION ${YANG_DIR})
