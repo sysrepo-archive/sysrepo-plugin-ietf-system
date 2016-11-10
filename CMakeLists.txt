@@ -24,11 +24,21 @@ add_library(sysrepo-plugin-ietf-system SHARED
 )
 target_link_libraries(sysrepo-plugin-ietf-system ${SYSREPO_LIBRARIES})
 
-set(PLUGINS_DIR "${CMAKE_INSTALL_LIBDIR}/sysrepo/plugins/" CACHE PATH "Sysrepo plugins directory.")
 set(YANG_DIR ${CMAKE_INSTALL_PREFIX}/share/sysrepo/yang)
 
-    install(FILES ${YANG_SRCS} DESTINATION ${YANG_DIR})
-install(TARGETS sysrepo-plugin-ietf-system DESTINATION ${PLUGINS_DIR})
+# get sysrepo plugins directory
+if (NOT SR_PLUGINS_DIR)
+    if (PKG_CONFIG_FOUND)
+        execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} "--variable=SR_PLUGINS_DIR" "libsysrepo" OUTPUT_VARIABLE SR_PLUGINS_DIR)
+        string(STRIP ${SR_PLUGINS_DIR} SR_PLUGINS_DIR)
+    endif()
+endif()
+if (NOT SR_PLUGINS_DIR)
+    message(FATAL_ERROR "Cannot get sysrepo plugins directory due to missing pkg-config, set SR_PLUGINS_DIR manually.")
+endif()
+
+install(FILES ${YANG_SRCS} DESTINATION ${YANG_DIR})
+install(TARGETS sysrepo-plugin-ietf-system DESTINATION ${SR_PLUGINS_DIR})
 install(CODE "MESSAGE(STATUS
 \"To enable this plugin, run:
 
