@@ -203,8 +203,10 @@ sr_plugin_init_cb(sr_session_ctx_t *session, void **private_ctx)
     rc = sr_dp_get_items_subscribe(session, "/ietf-system:system-state/platform/machine", platform_dp_cb, (void*)PF_MACHINE, SR_SUBSCR_CTX_REUSE, &subscription);
     if (SR_ERR_OK != rc) goto error;
 
-	sr_rpc_subscribe(session, "/ietf-system:system-restart", exec_rpc_cb, "shutdown -r now", SR_SUBSCR_CTX_REUSE, &subscription);
-	sr_rpc_subscribe(session, "/ietf-system:system-shutdown", exec_rpc_cb, "shutdown -h now", SR_SUBSCR_CTX_REUSE, &subscription);
+    rc = sr_rpc_subscribe(session, "/ietf-system:system-restart", exec_rpc_cb, "shutdown -r now", SR_SUBSCR_CTX_REUSE, &subscription);
+    if (SR_ERR_OK != rc) goto error;
+    rc = sr_rpc_subscribe(session, "/ietf-system:system-shutdown", exec_rpc_cb, "shutdown -h now", SR_SUBSCR_CTX_REUSE, &subscription);
+    if (SR_ERR_OK != rc) goto error;
 
     syslog(LOG_DEBUG, "plugin initialized successfully");
 
